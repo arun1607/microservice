@@ -1,13 +1,13 @@
 #!/bin/sh
 
 
-echo  "Do you want to start embedded broker: y/n"
-read embedded_broker_input
-if [ $embedded_broker_input == "y" ]; then
-	echo "Starting embedded broker"
-	java -jar ./embedded_activemq_broker/target/activemq-broker-1.2.6.RELEASE.jar  > embedded_broker.log 2>&1 &
-	echo $! >> services.pid
-fi
+#echo  "Do you want to start embedded broker: y/n"
+#read embedded_broker_input
+#if [ $embedded_broker_input == "y" ]; then
+#	echo "Starting embedded broker"
+#	java -jar ./embedded_activemq_broker/target/activemq-broker-1.2.6.RELEASE.jar  > embedded_broker.log 2>&1 &
+#	echo $! >> services.pid
+#fi
 
 echo "Do you want to start customer management service : y/n" 
 read custom_service_input
