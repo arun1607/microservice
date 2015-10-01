@@ -1,6 +1,12 @@
 ## Sample microservices based application in Spring Boot
 
+#### Infrastructure Setup
 
+1. Download activemq from http://www.apache.org/dyn/closer.cgi?path=/activemq/5.12.0/apache-activemq-5.12.0-bin.tar.gz
+2. Untar the downloaded assembly and go to base directory of activemq which should something similar to `apache-activemq-5.12.0`
+3. Under base directory run `bin/activemq start` to start activemq
+4. Access ActiveMQ at http://localhost:8161/admin/ with credential `admin/admin`
+5. Select `Topic` in navigation bar and create new topic with name `microservice`
 
 #### Application Setup
 
