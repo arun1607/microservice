@@ -10,7 +10,6 @@ import org.apache.camel.RoutesBuilder;
 import org.apache.camel.TypeConversionException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.TypeConverterSupport;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,11 +35,13 @@ public class AppConfig {
     RoutesBuilder myRouter() {
 
         String topic = environment.getProperty("queue.name");
+        String clientId = environment.getProperty("jms.clientId");
+        String subscriptionName = environment.getProperty("jms.durable.subscription.name");
 
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("activemq:topic:"+topic).beanRef("orderEventHandler", "handleEvent");
+                from("activemq:topic:" + topic + "?clientId=" + clientId + "&durableSubscriptionName=" + subscriptionName).beanRef("orderEventHandler", "handleEvent");
             }
 
         };
@@ -51,7 +52,7 @@ public class AppConfig {
 
         ActiveMQComponent activeMQComponent = new ActiveMQComponent();
         activeMQComponent.setBrokerURL("tcp://localhost:61616");
-        camelContext.addComponent("activemq",activeMQComponent);
+        camelContext.addComponent("activemq", activeMQComponent);
         camelContext.getTypeConverterRegistry().addTypeConverter(Event.class, String.class, new EventTypeConverter());
         return activeMQComponent;
     }

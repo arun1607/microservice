@@ -1,25 +1,72 @@
 #!/bin/sh
 
-echo "Stopping customer management service with ID : `cat customer_management_artifact/PID`"
 
-kill -9 `cat customer_management_artifact/PID`
+if [ -f customer_management_artifact/PID ]; then
+	echo "Do you want to stop customer management service : y/n" 
+	read custom_service_input
 
-rm -rf customer_management_artifact/PID
+	if [ $custom_service_input == "y" ]; then
+	
+		pid=`cat customer_management_artifact/PID`
 
-echo "Stopping inventory management service with ID : `cat inventory_management_artifact/PID`"
+		echo "Stopping customer management service with ID : $pid"
 
-kill -9 `cat inventory_management_artifact/PID`
+		kill -9 $pid
 
-rm -rf inventory_management_artifact/PID
+		rm -rf customer_management_artifact/PID
+	fi
+fi
 
-echo "Stopping order management service with ID : `cat order_management_artifact/PID`"
+if [ -f inventory_management_artifact/PID ]; then
+	echo ""
+	echo  "Do you want to stop inventory management service : y/n" 
+	read inventory_service_input
 
-kill -9 `cat order_management_artifact/PID`
+	if [ $inventory_service_input == "y" ]; then
+			
+		pid=`cat inventory_management_artifact/PID`
+	
+		echo "Stopping inventory management service with ID : $pid"
 
-rm -rf order_management_artifact/PID
+		kill -9 $pid
 
-echo "Stopping shipment management service with ID : `cat shipment_management_artifact/PID`"
+		rm -rf inventory_management_artifact/PID
+	fi
+	
+fi
 
-kill -9 `cat shipment_management_artifact/PID`
+if [ -f order_management_artifact/PID ]; then
+	echo ""
+	echo  "Do you want to stop order management service : y/n" 
+	read order_service_input
 
-rm -rf shipment_management_artifact/PID
+	if [ $order_service_input == "y" ]; then
+
+		pid=`cat order_management_artifact/PID`
+	
+		echo "Stopping order management service with ID : $pid"
+
+		kill -9 $pid
+
+		rm -rf order_management_artifact/PID
+	fi
+fi
+
+if [ -f shipment_management_artifact/PID ]; then
+	echo ""
+	echo  "Do you want to stop shipment management service : y/n" 
+	read shipment_service_input
+
+	if [ $shipment_service_input == "y" ]; then
+		
+		pid=`cat shipment_management_artifact/PID`
+	
+		echo "Stopping shipment management service with ID : $pid"
+
+		kill -9 $pid
+
+		rm -rf shipment_management_artifact/PID
+	fi
+fi
+
+

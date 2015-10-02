@@ -36,11 +36,13 @@ public class AppConfig {
     RoutesBuilder myRouter() {
 
         String topic = environment.getProperty("queue.name");
+        String clientId = environment.getProperty("jms.clientId");
+        String subscriptionName = environment.getProperty("jms.durable.subscription.name");
 
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("activemq:topic:"+topic).beanRef("customerEventHandler", "handleEvent");
+                from("activemq:topic:" + topic + "?clientId=" + clientId + "&durableSubscriptionName=" + subscriptionName).beanRef("customerEventHandler", "handleEvent");
             }
         };
     }
