@@ -3,18 +3,24 @@ package com.learning.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.event.Event;
 import lombok.extern.log4j.Log4j;
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.camel.component.ActiveMQComponent;
+import org.apache.activemq.camel.component.ActiveMQConfiguration;
+import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.TypeConversionException;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jms.JmsConfiguration;
 import org.apache.camel.support.TypeConverterSupport;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.jms.connection.JmsTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -51,11 +57,20 @@ public class AppConfig {
     @Bean
     public ActiveMQComponent activeMQComponent() {
 
-        ActiveMQComponent activeMQComponent = new ActiveMQComponent();
-        activeMQComponent.setBrokerURL("tcp://localhost:61616");
-        camelContext.addComponent("activemq",activeMQComponent);
+        ActiveMQComponent activeMQComponent = new ActiveMQComponent(jmsConfiguration());
+        camelContext.addComponent("activemq", activeMQComponent);
         camelContext.getTypeConverterRegistry().addTypeConverter(Event.class, String.class, new EventTypeConverter());
         return activeMQComponent;
+    }
+
+    @Bean
+    public  ActiveMQConfiguration jmsConfiguration() {
+        ActiveMQConfiguration activeMQConfiguration = new ActiveMQConfiguration();
+        activeMQConfiguration.setTransacted(true);
+        activeMQConfiguration.setCacheLevelName("CACHE_CONSUMER");
+        activeMQConfiguration.setMaxConcurrentConsumers(1);
+        activeMQConfiguration.setConcurrentConsumers(1);
+        return activeMQConfiguration;
     }
 
     @Bean
